@@ -4,7 +4,7 @@ const LoginPage = () => {
     return (
         <div className="login-page">
             <div>Log In To You Co_Ride Account</div>
-            <form>
+            <form className="login-form">
                 <input type="text" placeholder="Username" />
                 <input type="password" placeholder="Password" />
                 <button type="submit">Log In</button>

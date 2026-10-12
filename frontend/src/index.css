@@ -1,5 +1,5 @@
 .header {
-    background-color: #ed6b6b;
+    background-color: #efeccc;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,10 +8,25 @@
 }
 
 .login-page {
-    background-color: #eb7272;
+    background-color: #efeccc;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
     justify-content: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
 }
