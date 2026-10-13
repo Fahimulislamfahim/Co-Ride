@@ -1,4 +1,5 @@
-.auth-page {
+.auth-page,
+.auth_page {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -7,7 +8,8 @@
     background-color: #020617;
 }
 
-.auth-card {
+.auth-card,
+.auth_card {
     width: 100%;
     max-width: 448px;
     padding: 32px;
@@ -17,7 +19,8 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.auth-header {
+.auth-header,
+.auth_header {
     text-align: center;
 }
 
@@ -25,11 +28,13 @@
     margin-bottom: 32px;
 }
 
-.auth-header--registration {
+.auth-header--registration,
+.register_header {
     margin-bottom: 24px;
 }
 
-.auth-brand {
+.auth-brand,
+.auth_brand {
     margin: 0;
     color: #ffffff;
     font-size: 30px;
@@ -37,30 +42,35 @@
     letter-spacing: -0.02em;
 }
 
-.auth-brand__accent {
+.auth-brand__accent,
+.brand_accent {
     color: #10b981;
 }
 
-.auth-description {
+.auth-description,
+.auth_text {
     margin: 4px 0 0;
     color: #94a3b8;
     font-size: 14px;
 }
 
-.auth-message {
+.auth-message,
+.auth_message {
     margin-bottom: 16px;
     padding: 12px;
     border-radius: 8px;
     font-size: 14px;
 }
 
-.auth-message--error {
+.auth-message--error,
+.error_message {
     border: 1px solid rgba(244, 63, 94, 0.2);
     color: #fb7185;
     background-color: rgba(244, 63, 94, 0.1);
 }
 
-.auth-form {
+.auth-form,
+.auth_form {
     display: flex;
     flex-direction: column;
 }
@@ -69,17 +79,20 @@
     gap: 16px;
 }
 
-.auth-form--registration {
+.auth-form--registration,
+.register_form {
     gap: 14px;
 }
 
-.form-field {
+.form-field,
+.form_field {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.form-label {
+.form-label,
+.form_label {
     color: #cbd5e1;
     font-size: 12px;
     font-weight: 600;
@@ -87,7 +100,8 @@
     text-transform: uppercase;
 }
 
-.form-input {
+.form-input,
+.form_input {
     width: 100%;
     box-sizing: border-box;
     padding: 10px 16px;
@@ -99,25 +113,30 @@
     font-size: 14px;
 }
 
-.form-input::placeholder {
+.form-input::placeholder,
+.form_input::placeholder {
     color: #64748b;
 }
 
-.form-input:focus {
+.form-input:focus,
+.form_input:focus {
     border-color: #10b981;
 }
 
-.form-select {
+.form-select,
+.form_select {
     appearance: auto;
 }
 
-.registration-form__identity-fields {
+.registration-form__identity-fields,
+.register_fields {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
 }
 
-.auth-submit {
+.auth-submit,
+.auth_submit {
     margin-top: 8px;
     padding: 14px 16px;
     border: 0;
@@ -130,16 +149,19 @@
     transition: background-color 160ms ease, opacity 160ms ease;
 }
 
-.auth-submit:hover {
+.auth-submit:hover,
+.auth_submit:hover {
     background-color: #34d399;
 }
 
-.auth-submit:disabled {
+.auth-submit:disabled,
+.auth_submit:disabled {
     cursor: not-allowed;
     opacity: 0.5;
 }
 
-.auth-footer {
+.auth-footer,
+.auth_footer {
     color: #94a3b8;
     font-size: 14px;
     text-align: center;
@@ -149,11 +171,13 @@
     margin-top: 24px;
 }
 
-.auth-footer--registration {
+.auth-footer--registration,
+.register_footer {
     margin-top: 20px;
 }
 
-.auth-switch-button {
+.auth-switch-button,
+.switch_button {
     margin-left: 4px;
     padding: 0;
     border: 0;
@@ -165,16 +189,19 @@
     text-underline-offset: 4px;
 }
 
-.auth-switch-button:hover {
+.auth-switch-button:hover,
+.switch_button:hover {
     color: #6ee7b7;
 }
 
 @media (max-width: 480px) {
-    .auth-card {
+    .auth-card,
+    .auth_card {
         padding: 24px;
     }
 
-    .registration-form__identity-fields {
+    .registration-form__identity-fields,
+    .register_fields {
         grid-template-columns: 1fr;
     }
 }
@@ -317,6 +344,69 @@
 
 .approval-card__actions {
     gap: 12px;
+}
+
+.register_driver_section {
+    display: grid;
+    gap: 14px;
+    margin: 4px 0;
+    padding: 16px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+.register_driver_section legend {
+    padding: 0 6px;
+    color: #34d399;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.register_file_input {
+    padding: 8px;
+}
+
+.register_file_hint {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.driver_profile_details {
+    display: grid;
+    gap: 10px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.driver_profile_details dt {
+    color: #94a3b8;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.driver_profile_details dd {
+    margin: 2px 0 0;
+    color: #e2e8f0;
+}
+
+.approval_vehicle {
+    display: grid;
+    gap: 6px;
+    margin-top: 10px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.approval_vehicle strong {
+    color: #e2e8f0;
+}
+
+.license_preview {
+    display: block;
+    width: min(240px, 100%);
+    max-height: 160px;
+    object-fit: contain;
+    object-position: left;
 }
 
 .approval-card__button {

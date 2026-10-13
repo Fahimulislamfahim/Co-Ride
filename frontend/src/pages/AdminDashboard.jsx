@@ -1,5 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import API from '../services/api';
+
+const LicenseDocumentPreview = ({ userId }) => {
+  const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    let isActive = true;
+    let objectUrl;
+
+    API.get(`/admin/license/${userId}`, { responseType: 'blob' })
+      .then((res) => {
+        objectUrl = URL.createObjectURL(res.data);
+        if (isActive) setImageUrl(objectUrl);
+        else URL.revokeObjectURL(objectUrl);
+      })
+      .catch(() => {});
+
+    return () => {
+      isActive = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [userId]);
+
+  return imageUrl
+    ? <a href={imageUrl} target="_blank" rel="noreferrer"><img className="license_preview" src={imageUrl} alt="Uploaded driving license" /></a>
+    : <span>License image unavailable</span>;
+};
 
 const AdminDashboard = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -7,22 +33,15 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-  const fetchPendingQueue = async () => {
-    try {
-      setLoading(true);
-      const res = await API.get('/admin/pending');
-      if (res.data.success) {
-        setPendingUsers(res.data.users);
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch pending queue');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchPendingQueue();
+    API.get('/admin/pending')
+      .then((res) => {
+        if (res.data.success) setPendingUsers(res.data.users);
+      })
+      .catch((err) => {
+        setError(err.response?.data?.message || 'Failed to fetch pending queue');
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const handleAction = async (userId, action) => {
@@ -88,6 +107,13 @@ const AdminDashboard = () => {
                     <span>ID: <strong>{user.studentId}</strong></span>
                     <span>Email: <strong>{user.email}</strong></span>
                   </div>
+                  {user.role === 'driver' && (
+                    <div className="approval_vehicle">
+                      <span>Vehicle: <strong>{user.vehicle?.type} {user.vehicle?.model}</strong></span>
+                      <span>Plate: <strong>{user.vehicle?.registrationPlate || 'Not provided'}</strong></span>
+                      {user.licenseDocument && <LicenseDocumentPreview userId={user._id} />}
+                    </div>
+                  )}
                 </div>
 
                 <div className="approval_actions">

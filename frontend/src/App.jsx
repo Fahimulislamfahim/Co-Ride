@@ -1,18 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
+import API from './services/api';
 
 function App() {
   const [isRegister, setIsRegister] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [driverProfile, setDriverProfile] = useState(null);
+  const [driverProfileError, setDriverProfileError] = useState('');
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
-    }
-  }, []);
+    if (currentUser?.role !== 'driver') return undefined;
+
+    let isActive = true;
+    API.get('/auth/driver-profile')
+      .then((res) => {
+        if (isActive) setDriverProfile(res.data.profile);
+      })
+      .catch((error) => {
+        if (isActive) {
+          setDriverProfileError(error.response?.data?.message || 'Could not load driver profile');
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [currentUser]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -38,6 +56,9 @@ function App() {
       );
     }
 
+    const profile = driverProfile || currentUser;
+    const verificationStatus = profile.verificationStatus || (profile.isVerified ? 'approved' : 'pending');
+
     return (
       <main className="profile_page">
         <section className="profile_card">
@@ -50,8 +71,17 @@ function App() {
             Role: {currentUser.role}
           </div>
           <p className="profile_status">
-            Verification Status: {currentUser.isVerified ? 'Verified' : 'Pending Approval'}
+            Verification Status: {verificationStatus.charAt(0).toUpperCase() + verificationStatus.slice(1)}
           </p>
+          {driverProfileError && <p role="alert">{driverProfileError}</p>}
+          {currentUser.role === 'driver' && profile.vehicle && (
+            <dl className="driver_profile_details">
+              <div><dt>Vehicle type</dt><dd>{profile.vehicle.type}</dd></div>
+              <div><dt>Model</dt><dd>{profile.vehicle.model}</dd></div>
+              <div><dt>Registration plate</dt><dd>{profile.vehicle.registrationPlate}</dd></div>
+              <div><dt>Driving license</dt><dd>{profile.hasLicenseDocument ? 'Submitted' : 'Not submitted'}</dd></div>
+            </dl>
+          )}
           <div className="profile_actions">
             <button
               onClick={handleLogout}

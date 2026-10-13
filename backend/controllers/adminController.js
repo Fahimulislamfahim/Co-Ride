@@ -1,9 +1,16 @@
 import User from '../models/User.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// ii. Pending Verification: Fetches unapproved users/drivers for admin review
+const uploadDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../uploads');
+
+
 export const getPendingVerifications = async (req, res) => {
   try {
-    const pendingUsers = await User.find({ isVerified: false }).select('-password');
+    const pendingUsers = await User.find({
+      isVerified: false,
+      verificationStatus: { $ne: 'rejected' },
+    }).select('-password');
     return res.status(200).json({
       success: true,
       count: pendingUsers.length,
@@ -14,11 +21,11 @@ export const getPendingVerifications = async (req, res) => {
   }
 };
 
-// iii. Update Verification Status: Approves or rejects submitted documents
+
 export const updateVerificationStatus = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { status } = req.body; // 'approve' or 'reject'
+    const { status } = req.body; 
 
     const user = await User.findById(userId);
     if (!user) {
@@ -27,6 +34,7 @@ export const updateVerificationStatus = async (req, res) => {
 
     if (status === 'approve') {
       user.isVerified = true;
+      user.verificationStatus = 'approved';
       await user.save();
       return res.status(200).json({
         success: true,
@@ -35,6 +43,7 @@ export const updateVerificationStatus = async (req, res) => {
       });
     } else if (status === 'reject') {
       user.isVerified = false;
+      user.verificationStatus = 'rejected';
       await user.save();
       return res.status(200).json({
         success: true,
@@ -44,6 +53,19 @@ export const updateVerificationStatus = async (req, res) => {
     } else {
       return res.status(400).json({ message: 'Invalid status action. Use "approve" or "reject".' });
     }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getLicenseDocument = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select('licenseDocument');
+    if (!user?.licenseDocument) {
+      return res.status(404).json({ message: 'License document not found' });
+    }
+
+    return res.sendFile(path.join(uploadDirectory, path.basename(user.licenseDocument)));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

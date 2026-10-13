@@ -37,6 +37,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    vehicle: {
+      type: new mongoose.Schema(
+        {
+          type: { type: String, enum: ['motorcycle', 'car'] },
+          model: { type: String, trim: true, maxlength: 80 },
+          registrationPlate: { type: String, trim: true, uppercase: true, maxlength: 25 },
+        },
+        { _id: false }
+      ),
+      default: undefined,
+    },
+    licenseDocument: {
+      type: String,
+      default: '',
+    },
+    verificationStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
     isVerified: {
       type: Boolean,
       default: false,
