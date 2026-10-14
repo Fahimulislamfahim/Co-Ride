@@ -3,7 +3,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
 import API from './services/api';
-
+import ProfilePage from './pages/ProfilePage';
 function App() {
   const [isRegister, setIsRegister] = useState(false);
   const [currentUser, setCurrentUser] = useState(() => {
@@ -12,6 +12,7 @@ function App() {
   });
   const [driverProfile, setDriverProfile] = useState(null);
   const [driverProfileError, setDriverProfileError] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     if (currentUser?.role !== 'driver') return undefined;
@@ -55,7 +56,18 @@ function App() {
         </div>
       );
     }
-
+if (showProfile) {
+  return (
+    <ProfilePage
+      onBack={() => setShowProfile(false)}
+      onUpdated={(u) => {
+        const updated = { ...currentUser, name: u.name };
+        localStorage.setItem('user', JSON.stringify(updated));
+        setCurrentUser(updated);
+      }}
+    />
+  );
+}
     const profile = driverProfile || currentUser;
     const verificationStatus = profile.verificationStatus || (profile.isVerified ? 'approved' : 'pending');
 
@@ -83,13 +95,14 @@ function App() {
             </dl>
           )}
           <div className="profile_actions">
-            <button
-              onClick={handleLogout}
-              className="logout_button logout_profile"
-            >
-              Log Out
-            </button>
-          </div>
+  <button onClick={() => setShowProfile(true)}>Edit Profile</button>
+  <button
+    onClick={handleLogout}
+    className="logout_button logout_profile"
+  >
+    Log Out
+  </button>
+</div>
         </section>
       </main>
     );
