@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 .auth-page,
 .auth_page {
     min-height: 100vh;
@@ -456,5 +460,226 @@
 
     .approval-card__button {
         flex: 1;
+    }
+}
+
+.profile_page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background-color: #020617;
+    color: #ffffff;
+}
+
+.profile_card {
+    width: 100%;
+    max-width: 520px;
+    box-sizing: border-box;
+    padding: 32px;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    background-color: #0f172a;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.profile_avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    color: #020617;
+    background-color: #10b981;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.profile_name {
+    margin: 0;
+    color: #ffffff;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.profile_email,
+.profile_status {
+    color: #94a3b8;
+}
+
+.profile_email {
+    margin: 8px 0 20px;
+    font-size: 14px;
+}
+
+.profile_role {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 999px;
+    color: #34d399;
+    background-color: rgba(16, 185, 129, 0.1);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.profile_status {
+    margin: 0;
+    font-size: 14px;
+}
+
+.profile_card > [role='alert'] {
+    margin: 16px 0;
+    padding: 12px;
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    border-radius: 8px;
+    color: #fb7185;
+    background-color: rgba(244, 63, 94, 0.1);
+    font-size: 14px;
+}
+
+.profile_actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.profile_actions button,
+.profile_card > button {
+    padding: 10px 16px;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    color: #cbd5e1;
+    background-color: #1e293b;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.profile_actions button:hover,
+.profile_card > button:hover {
+    border-color: #10b981;
+    background-color: #334155;
+}
+
+.profile_actions .logout_button {
+    border-color: rgba(244, 63, 94, 0.3);
+    color: #fb7185;
+    background-color: rgba(244, 63, 94, 0.1);
+}
+
+.profile_actions .logout_button:hover {
+    background-color: rgba(244, 63, 94, 0.2);
+}
+
+.profile_card > .verification_badge {
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+.verification_badge {
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.verification_badge--verified {
+    border-color: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.verification_badge--pending {
+    border-color: rgba(234, 179, 8, 0.3);
+    color: #facc15;
+    background-color: rgba(234, 179, 8, 0.1);
+}
+
+.verification_badge--rejected {
+    border-color: rgba(244, 63, 94, 0.3);
+    color: #fb7185;
+    background-color: rgba(244, 63, 94, 0.1);
+}
+
+.profile_card > p:not(.profile_email):not(.profile_status) {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.profile_card h3 {
+    margin: 24px 0 16px;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.profile_card > input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 12px;
+    padding: 10px 16px;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    outline: none;
+    color: #ffffff;
+    background-color: rgba(30, 41, 59, 0.6);
+    font-size: 14px;
+}
+
+.profile_card > input:focus {
+    border-color: #10b981;
+}
+
+.profile_card > input::placeholder {
+    color: #64748b;
+}
+
+.profile_card > input + br {
+    display: none;
+}
+
+.profile_card > input ~ button {
+    margin-top: 4px;
+    border-color: transparent;
+    color: #020617;
+    background-color: #10b981;
+}
+
+.profile_card > input ~ button:hover {
+    border-color: transparent;
+    background-color: #34d399;
+}
+
+.profile_card > input ~ p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 480px) {
+    .profile_page {
+        padding: 16px;
+    }
+
+    .profile_card {
+        padding: 24px;
+    }
+
+    .profile_actions {
+        flex-direction: column;
+    }
+
+    .profile_actions button {
+        width: 100%;
     }
 }

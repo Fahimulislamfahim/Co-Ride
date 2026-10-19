@@ -59,51 +59,51 @@ const AdminDashboard = () => {
   };
 
   return (
-    <main className="admin_dashboard">
-      <div className="dashboard_box">
-        <header className="dashboard_header">
+    <main className="admin-dashboard">
+      <div className="admin-dashboard__container">
+        <header className="admin-dashboard__header">
           <div>
-            <h1 className="dashboard_title">Admin Dashboard</h1>
-            <p className="dashboard_subtitle">Pending Verification Review Queue</p>
+            <h1 className="admin-dashboard__title">Admin Dashboard</h1>
+            <p className="admin-dashboard__subtitle">Pending Verification Review Queue</p>
           </div>
-          <span className="queue_count">
+          <span className="admin-dashboard__queue-count">
             Pending Queue: {pendingUsers.length}
           </span>
         </header>
 
         {message && (
-          <div className="dashboard_notice success_notice">
+          <div className="admin-dashboard__notice admin-dashboard__notice--success">
             {message}
           </div>
         )}
 
         {error && (
-          <div className="dashboard_notice error_notice">
+          <div className="admin-dashboard__notice admin-dashboard__notice--error">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="status_message">Loading pending verification requests...</div>
+          <div className="admin-dashboard__status-message">Loading pending verification requests...</div>
         ) : pendingUsers.length === 0 ? (
-          <div className="empty_state">
+          <div className="admin-dashboard__empty-state">
             No pending user verifications at this time.
           </div>
         ) : (
-          <section className="approval_list" aria-label="Pending user approvals">
+          <section className="admin-dashboard__approval-list" aria-label="Pending user approvals">
             {pendingUsers.map((user) => (
               <div
                 key={user._id}
-                className="approval_card"
+                className="approval-card"
               >
-                <div className="approval_details">
-                  <div className="approval_identity">
-                    <h2 className="approval_name">{user.name}</h2>
-                    <span className="approval_role">
+                <div className="approval-card__details">
+                  <div className="approval-card__identity">
+                    <h2 className="approval-card__name">{user.name}</h2>
+                    <span className="approval-card__role">
                       {user.role}
                     </span>
                   </div>
-                  <div className="approval_contact">
+                  <div className="approval-card__contact">
                     <span>ID: <strong>{user.studentId}</strong></span>
                     <span>Email: <strong>{user.email}</strong></span>
                   </div>
@@ -116,16 +116,16 @@ const AdminDashboard = () => {
                   )}
                 </div>
 
-                <div className="approval_actions">
+                <div className="approval-card__actions">
                   <button
                     onClick={() => handleAction(user._id, 'approve')}
-                    className="approval_button approve_button"
+                    className="approval-card__button approval-card__button--approve"
                   >
                     Approve
                   </button>
                   <button
                     onClick={() => handleAction(user._id, 'reject')}
-                    className="approval_button reject_button"
+                    className="approval-card__button approval-card__button--reject"
                   >
                     Reject
                   </button>
