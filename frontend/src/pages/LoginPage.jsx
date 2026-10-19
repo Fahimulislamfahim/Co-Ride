@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import API from '../services/api';
+import { Car, Mail, Lock, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
 const LoginPage = ({ onSwitchToRegister }) => {
   const [formData, setFormData] = useState({
@@ -38,45 +39,62 @@ const LoginPage = ({ onSwitchToRegister }) => {
     <main className="auth_page login_page">
       <div className="auth_card">
         <header className="auth_header login_header">
+          <div className="brand_logo_container">
+            <div className="brand_icon_glow"></div>
+            <div className="brand_icon_wrapper">
+              <Car className="brand_icon" size={26} />
+            </div>
+          </div>
+          <div className="brand_pill_tag">
+            <span className="brand_pill_dot"></span>
+            DIU Smart Mobility
+          </div>
           <h1 className="auth_brand">Co<span className="brand_accent">Ride</span></h1>
           <p className="auth_text">Your Daily Campus Commute Partner</p>
         </header>
 
         {error && (
           <div className="auth_message error_message">
-            {error}
+            <AlertCircle size={18} className="message_icon" />
+            <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="auth_form login_form">
           <div className="form_field">
             <label className="form_label">
-              DIU Email
+              DIU Institutional Email
             </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="name@diu.edu.bd"
-              required
-              className="form_input"
-            />
+            <div className="input_with_icon">
+              <Mail className="field_icon" size={17} />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="name@diu.edu.bd"
+                required
+                className="form_input"
+              />
+            </div>
           </div>
 
           <div className="form_field">
             <label className="form_label">
               Password
             </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="******"
-              required
-              className="form_input"
-            />
+            <div className="input_with_icon">
+              <Lock className="field_icon" size={17} />
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+                className="form_input"
+              />
+            </div>
           </div>
 
           <button
@@ -84,7 +102,17 @@ const LoginPage = ({ onSwitchToRegister }) => {
             disabled={loading}
             className="auth_submit"
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            {loading ? (
+              <>
+                <Loader2 className="btn_spinner" size={18} />
+                <span>Authenticating...</span>
+              </>
+            ) : (
+              <>
+                <span>Sign In</span>
+                <ArrowRight size={17} className="btn_arrow" />
+              </>
+            )}
           </button>
         </form>
 
@@ -95,7 +123,7 @@ const LoginPage = ({ onSwitchToRegister }) => {
             onClick={onSwitchToRegister}
             className="switch_button"
           >
-            Sign up
+            Create account
           </button>
         </footer>
       </div>
