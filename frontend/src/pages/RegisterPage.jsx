@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import API from '../services/api';
 import { 
-  Car, 
+  Car,
   User, 
   Hash, 
   Phone, 
@@ -12,16 +12,17 @@ import {
   FileCheck, 
   AlertCircle, 
   Loader2, 
-  CheckCircle2 
+  CheckCircle2,
+  ArrowLeft 
 } from 'lucide-react';
 
-const RegisterPage = ({ onSwitchToLogin }) => {
+const RegisterPage = ({ onSwitchToLogin, initialRole = 'passenger', onBackToHome }) => {
   const [formData, setFormData] = useState({
     name: '',
     studentId: '',
     email: '',
     password: '',
-    role: 'passenger',
+    role: initialRole || 'passenger',
     phone: '',
   });
   const [error, setError] = useState('');
@@ -71,11 +72,17 @@ const RegisterPage = ({ onSwitchToLogin }) => {
   return (
     <main className="auth_page register_page">
       <div className="auth_card">
+        {onBackToHome && (
+          <button type="button" onClick={onBackToHome} className="auth_back_home_btn">
+            <ArrowLeft size={15} />
+            <span>Back to Home</span>
+          </button>
+        )}
         <header className="auth_header register_header">
           <div className="brand_logo_container">
             <div className="brand_icon_glow"></div>
-            <div className="brand_icon_wrapper">
-              <Car className="brand_icon" size={26} />
+            <div className="brand_icon_wrapper brand_icon_wrapper--logo">
+              <img src="/logo.png" alt="CoRide Logo" className="auth_brand_logo_img" />
             </div>
           </div>
           <div className="brand_pill_tag">

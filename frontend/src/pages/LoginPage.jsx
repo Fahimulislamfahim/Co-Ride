@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import API from '../services/api';
-import { Car, Mail, Lock, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ArrowLeft, AlertCircle, Loader2 } from 'lucide-react';
 
-const LoginPage = ({ onSwitchToRegister }) => {
+const LoginPage = ({ onSwitchToRegister, onBackToHome }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,11 +38,17 @@ const LoginPage = ({ onSwitchToRegister }) => {
   return (
     <main className="auth_page login_page">
       <div className="auth_card">
+        {onBackToHome && (
+          <button type="button" onClick={onBackToHome} className="auth_back_home_btn">
+            <ArrowLeft size={15} />
+            <span>Back to Home</span>
+          </button>
+        )}
         <header className="auth_header login_header">
           <div className="brand_logo_container">
             <div className="brand_icon_glow"></div>
-            <div className="brand_icon_wrapper">
-              <Car className="brand_icon" size={26} />
+            <div className="brand_icon_wrapper brand_icon_wrapper--logo">
+              <img src="/logo.png" alt="CoRide Logo" className="auth_brand_logo_img" />
             </div>
           </div>
           <div className="brand_pill_tag">

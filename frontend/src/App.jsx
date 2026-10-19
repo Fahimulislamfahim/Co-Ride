@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
@@ -18,7 +19,8 @@ import {
 } from 'lucide-react';
 
 function App() {
-  const [isRegister, setIsRegister] = useState(false);
+  const [view, setView] = useState('landing'); // 'landing' | 'login' | 'register'
+  const [registerRole, setRegisterRole] = useState('passenger');
   const [currentUser, setCurrentUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
@@ -50,6 +52,7 @@ function App() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setCurrentUser(null);
+    setView('landing');
   };
 
   if (currentUser) {
@@ -58,8 +61,8 @@ function App() {
         <div className="admin_layout">
           <header className="admin_bar">
             <div className="admin_brand_lockup">
-              <div className="admin_brand_icon">
-                <Car size={20} />
+              <div className="admin_brand_icon admin_brand_icon--logo">
+                <img src="/logo.png" alt="CoRide Admin" className="admin_brand_logo_img" />
               </div>
               <span className="admin_brand_title">
                 Co<span className="brand_accent">Ride</span> Admin
@@ -204,14 +207,36 @@ function App() {
     );
   }
 
+  if (view === 'login') {
+    return (
+      <LoginPage 
+        onSwitchToRegister={() => {
+          setRegisterRole('passenger');
+          setView('register');
+        }} 
+        onBackToHome={() => setView('landing')} 
+      />
+    );
+  }
+
+  if (view === 'register') {
+    return (
+      <RegisterPage 
+        onSwitchToLogin={() => setView('login')} 
+        initialRole={registerRole}
+        onBackToHome={() => setView('landing')} 
+      />
+    );
+  }
+
   return (
-    <>
-      {isRegister ? (
-        <RegisterPage onSwitchToLogin={() => setIsRegister(false)} />
-      ) : (
-        <LoginPage onSwitchToRegister={() => setIsRegister(true)} />
-      )}
-    </>
+    <LandingPage 
+      onNavigateLogin={() => setView('login')}
+      onNavigateRegister={(role = 'passenger') => {
+        setRegisterRole(role);
+        setView('register');
+      }}
+    />
   );
 }
 
