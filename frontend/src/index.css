@@ -1450,6 +1450,61 @@ body::after {
     opacity: 0.5;
 }
 
+.driver_dashboard_page {
+    align-items: flex-start;
+}
+
+.driver_dashboard_shell {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+    gap: 24px;
+    width: min(100%, 1240px);
+    align-items: start;
+}
+
+.driver_dashboard_shell .profile_card {
+    position: sticky;
+    top: 24px;
+    width: 100%;
+}
+
+.driver_dashboard_content {
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+}
+
+.dashboard_section_heading {
+    padding: 4px 4px 0;
+}
+
+.dashboard_section_kicker {
+    color: var(--primary-light);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.dashboard_section_heading h2 {
+    margin: 4px 0 0;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 26px;
+}
+
+.dashboard_section_heading p {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.driver_dashboard_content .ride_publish_card,
+.driver_dashboard_content .published_rides_card {
+    width: 100%;
+    margin: 0;
+}
+
 @media (max-width: 640px) {
     .profile_card,
     .ride_publish_card,
@@ -1480,6 +1535,16 @@ body::after {
 
     .ride_status_select {
         width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .driver_dashboard_shell {
+        grid-template-columns: 1fr;
+    }
+
+    .driver_dashboard_shell .profile_card {
+        position: static;
     }
 }
 

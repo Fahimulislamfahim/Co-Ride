@@ -120,7 +120,8 @@ function App() {
     const verificationStatus = profile.verificationStatus || (profile.isVerified ? 'approved' : 'pending');
 
     return (
-      <main className="profile_page">
+      <main className={`profile_page ${currentUser.role === 'driver' ? 'driver_dashboard_page' : ''}`}>
+        <div className={currentUser.role === 'driver' ? 'driver_dashboard_shell' : ''}>
         <section className="profile_card main_profile_card">
           <div className="profile_header_brand">
             <div className="profile_header_badge">
@@ -223,11 +224,17 @@ function App() {
           </div>
         </section>
         {currentUser.role === 'driver' && (
-          <>
+          <div className="driver_dashboard_content">
+            <div className="dashboard_section_heading">
+              <span className="dashboard_section_kicker">Driver workspace</span>
+              <h2>Manage your rides</h2>
+              <p>Publish a route, then keep passengers updated from one place.</p>
+            </div>
             <CreateRidePage onRideCreated={() => setRideRefreshKey((key) => key + 1)} />
             <MyPublishedRides refreshKey={rideRefreshKey} />
-          </>
+          </div>
         )}
+        </div>
       </main>
     );
   }

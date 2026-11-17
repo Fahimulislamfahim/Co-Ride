@@ -23,6 +23,16 @@ const formatDate = (date) => {
     : parsedDate.toLocaleDateString();
 };
 
+const formatLocation = (location) => {
+  if (typeof location === 'string') return location;
+  return location?.name || 'Location unavailable';
+};
+
+const formatFare = (fare) => {
+  const amount = Number(fare);
+  return Number.isFinite(amount) ? amount.toFixed(2) : 'Not available';
+};
+
 const MyPublishedRides = ({ refreshKey = 0 }) => {
   const [rides, setRides] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,12 +136,12 @@ const MyPublishedRides = ({ refreshKey = 0 }) => {
                 <div className="published_ride_route">
                   <div>
                     <span className="ride_detail_label">Origin</span>
-                    <strong>{ride.origin}</strong>
+                    <strong>{formatLocation(ride.origin)}</strong>
                   </div>
                   <span className="route_arrow" aria-hidden="true">→</span>
                   <div>
                     <span className="ride_detail_label">Destination</span>
-                    <strong>{ride.destination}</strong>
+                    <strong>{formatLocation(ride.destination)}</strong>
                   </div>
                   <span className={`ride_status_badge ride_status_${statusClass}`}>{status}</span>
                 </div>
@@ -141,7 +151,7 @@ const MyPublishedRides = ({ refreshKey = 0 }) => {
                   <div><dt>Departure time</dt><dd>{ride.departureTime}</dd></div>
                   <div><dt>Available seats</dt><dd>{ride.availableSeats}</dd></div>
                   <div><dt>Total seats</dt><dd>{ride.totalSeats ?? ride.availableSeats}</dd></div>
-                  <div><dt>Split fare</dt><dd>{Number(ride.splitFare).toFixed(2)}</dd></div>
+                  <div><dt>Split fare</dt><dd>{formatFare(ride.splitFare)}</dd></div>
                 </dl>
                 <div className="ride_status_controls">
                   <label className="ride_status_control_label" htmlFor={`ride-status-${ride._id}`}>
