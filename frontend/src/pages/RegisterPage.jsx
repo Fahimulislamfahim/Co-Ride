@@ -41,6 +41,22 @@ const RegisterPage = ({ onSwitchToLogin, initialRole = 'passenger', onBackToHome
       return setError('Must use an official DIU email address');
     }
 
+    if (formData.password.length < 6) {
+      return setError('Password must be at least 6 characters');
+    }
+
+    if (formData.role === 'driver' && !licenseDocument) {
+      return setError('Upload a driving license image');
+    }
+
+    if (formData.role === 'driver' && !['image/jpeg', 'image/png', 'image/webp'].includes(licenseDocument.type)) {
+      return setError('License must be a JPEG, PNG, or WebP image');
+    }
+
+    if (formData.role === 'driver' && licenseDocument.size > 5 * 1024 * 1024) {
+      return setError('License image must be 5 MB or smaller');
+    }
+
     setLoading(true);
 
     try {
@@ -295,6 +311,7 @@ const RegisterPage = ({ onSwitchToLogin, initialRole = 'passenger', onBackToHome
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Minimum 6 characters"
+                minLength={6}
                 required
                 className="form_input"
               />

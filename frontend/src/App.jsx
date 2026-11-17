@@ -3,6 +3,8 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
+import CreateRidePage from './pages/CreateRidePage';
+import MyPublishedRides from './pages/MyPublishedRides';
 import API from './services/api';
 import ProfilePage from './pages/ProfilePage';
 import FindRidesPage from './pages/FindRidesPage';
@@ -29,6 +31,7 @@ function App() {
   });
   const [driverProfile, setDriverProfile] = useState(null);
   const [driverProfileError, setDriverProfileError] = useState('');
+  const [rideRefreshKey, setRideRefreshKey] = useState(0);
   const [showProfile, setShowProfile] = useState(false);
   const [showFindRides, setShowFindRides] = useState(false);
 
@@ -219,6 +222,12 @@ function App() {
             </button>
           </div>
         </section>
+        {currentUser.role === 'driver' && (
+          <>
+            <CreateRidePage onRideCreated={() => setRideRefreshKey((key) => key + 1)} />
+            <MyPublishedRides refreshKey={rideRefreshKey} />
+          </>
+        )}
       </main>
     );
   }

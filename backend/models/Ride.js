@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const locationSchema = new mongoose.Schema(
   {
     name: {
@@ -29,6 +28,10 @@ const rideSchema = new mongoose.Schema(
       type: Date,
       required: [true, 'Departure time is required'],
     },
+    departureDate: {
+      type: Date,
+      required: [true, 'Please select a departure date'],
+    },
     totalSeats: {
       type: Number,
       required: true,
@@ -46,11 +49,15 @@ const rideSchema = new mongoose.Schema(
         message: 'Available seats cannot exceed total seats',
       },
     },
-    // Split fare charged to each passenger, in BDT.
     farePerSeat: {
       type: Number,
       required: [true, 'Fare per seat is required'],
       min: [0, 'Fare cannot be negative'],
+    },
+    splitFare: {
+      type: Number,
+      required: [true, 'Please enter the split fare'],
+      min: [0, 'Split fare cannot be negative'],
     },
     status: {
       type: String,
