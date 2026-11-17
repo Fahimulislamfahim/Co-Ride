@@ -1,0 +1,466 @@
+/* ==========================================================================
+   Find a Ride — search page + ride cards (Module 2, Anika)
+   Uses the design tokens defined in index.css (:root)
+   ========================================================================== */
+
+.rides_page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 36px 16px 60px;
+  position: relative;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 10%, #0c1833 0%, #060913 70%);
+}
+
+.rides_shell {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rides_header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.rides_title {
+  margin: 6px 0 0;
+  font-family: var(--font-heading);
+  font-size: 30px;
+  color: var(--text-primary);
+}
+
+.rides_subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ---- search form ---- */
+.rides_search_form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 24px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-top-color: var(--border-highlight);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  text-align: left;
+}
+
+.rides_search_form select.form_input {
+  appearance: none;
+  cursor: pointer;
+}
+
+.rides_search_btn {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+}
+
+/* ---- filter bar ---- */
+.rides_filter_bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--bg-glass-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.rides_filter_label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rides_time_chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rides_chip_btn {
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rides_chip_btn:hover {
+  border-color: var(--border-highlight);
+  color: #ffffff;
+}
+
+.rides_chip_btn--active {
+  background: var(--color-success-bg);
+  border-color: var(--border-active);
+  color: var(--primary-light);
+}
+
+.rides_filter_inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.rides_inline_field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 180px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rides_compact_input {
+  padding: 9px 12px;
+}
+
+/* ---- results ---- */
+.rides_results {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rides_count {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rides_empty {
+  padding: 36px 20px;
+  text-align: center;
+  background: var(--bg-glass-subtle);
+  border: 1px dashed var(--border-highlight);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+}
+
+.rides_empty p {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ---- ride card ---- */
+.ride_card {
+  padding: 20px 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  text-align: left;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.ride_card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+}
+
+.ride_card_top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ride_driver {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ride_driver_avatar {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--grad-brand);
+  color: #020617;
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
+
+.ride_driver_meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ride_driver_name {
+  color: var(--text-primary);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ride_driver_stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.ride_star {
+  color: var(--color-warning);
+  fill: var(--color-warning);
+}
+
+.ride_dot {
+  color: var(--text-dim);
+}
+
+.ride_fare {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.ride_fare_amount {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary-light);
+  line-height: 1;
+}
+
+.ride_fare_unit {
+  margin-top: 4px;
+  color: var(--text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ride_route {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0 14px;
+}
+
+.ride_route_line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.ride_route_pin--from { color: var(--accent-cyan-light); }
+.ride_route_pin--to { color: var(--primary-light); }
+
+.ride_route_connector {
+  flex: 1;
+  width: 0;
+  border-left: 2px dashed var(--border-highlight);
+}
+
+.ride_route_places {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ride_place {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ride_info_row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ride_chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ride_chip strong {
+  color: var(--text-primary);
+}
+
+.ride_seats--ok {
+  color: var(--color-success);
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+}
+
+.ride_seats--low {
+  color: var(--color-warning);
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+}
+
+.ride_seats--full {
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
+}
+
+.ride_card_actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ride_toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ride_toggle:hover {
+  color: #ffffff;
+}
+
+.ride_chevron {
+  transition: transform 0.2s ease;
+}
+
+.ride_chevron--open {
+  transform: rotate(180deg);
+}
+
+.ride_request_btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--grad-brand);
+  color: #020617;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px -2px var(--primary-glow);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.ride_request_btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.ride_request_btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ride_details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  background: var(--bg-glass-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.ride_detail_row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.ride_detail_row dt {
+  color: var(--text-muted);
+}
+
+.ride_details .plate_badge {
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.ride_detail_row dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+.find_ride_btn {
+  border-color: var(--border-active);
+  color: var(--primary-light);
+}
+
+/* ---- small screens (min supported width: 360px) ---- */
+@media (max-width: 560px) {
+  .rides_search_form {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .ride_card {
+    padding: 16px;
+  }
+
+  .ride_card_top {
+    flex-wrap: wrap;
+  }
+
+  .ride_fare {
+    align-items: flex-start;
+  }
+}

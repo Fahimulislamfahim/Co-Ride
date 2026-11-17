@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import rideSearchRoutes from './routes/rideSearchRoutes.js';
 dotenv.config();
 
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes); 
 app.use('/api/profile', profileRoutes);
+app.use('/api/rides', rideSearchRoutes);
 app.get('/', (req, res) => {
   res.send('CoRide API is running...');
 });
