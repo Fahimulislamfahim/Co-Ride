@@ -14,7 +14,6 @@ import { formatDeparture } from '../utils/rideFilters';
 
 const capitalize = (text = '') => text.charAt(0).toUpperCase() + text.slice(1);
 
-
 export default function RideCard({ ride, onRequestSeat }) {
   const [expanded, setExpanded] = useState(false);
   const { driver = {}, origin, destination } = ride;
@@ -136,4 +135,3 @@ export default function RideCard({ ride, onRequestSeat }) {
     </article>
   );
 }
-v

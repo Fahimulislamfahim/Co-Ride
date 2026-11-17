@@ -2,7 +2,6 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildSearchFilter } from '../controllers/rideSearchController.js';
 
-// Fixed "now": 2026-11-16 10:00 in Dhaka (04:00 UTC)
 const NOW = new Date('2026-11-16T04:00:00.000Z');
 const USER_ID = 'user-123';
 const build = (query) => buildSearchFilter(query, { userId: USER_ID, now: NOW });
@@ -28,7 +27,7 @@ test('rejects invalid seat counts', () => {
 
 test('date becomes a Dhaka-time day range', () => {
   const { filter } = build({ date: '2026-11-20' });
-  assert.equal(filter.departureTime.$gte.toISOString(), '2026-11-19T18:00:00.000Z'); // 00:00 +06:00
+  assert.equal(filter.departureTime.$gte.toISOString(), '2026-11-19T18:00:00.000Z');
   assert.equal(filter.departureTime.$lt.toISOString(), '2026-11-20T18:00:00.000Z');
 });
 
@@ -51,7 +50,6 @@ test('location text is matched case-insensitively and literally (regex is escape
 });
 
 test('NoSQL operator injection through location params is ignored', () => {
-  // Express/qs turns ?origin[$ne]=x into { origin: { $ne: 'x' } }
   const { filter } = build({ origin: { $ne: 'x' }, destination: ['a', 'b'] });
   assert.equal(filter['origin.name'], undefined);
   assert.equal(filter['destination.name'], undefined);
@@ -64,4 +62,3 @@ test('operator objects in seats are rejected', () => {
 test('rejects very long location text', () => {
   assert.match(build({ origin: 'a'.repeat(101) }).error, /100 characters/);
 });
-

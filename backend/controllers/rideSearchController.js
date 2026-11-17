@@ -19,7 +19,7 @@ const dayRangeInDhaka = (dateText) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateText)) return null;
   const start = new Date(`${dateText}T00:00:00${DHAKA_OFFSET}`);
   if (Number.isNaN(start.getTime())) return null;
-  
+
   const roundTrip = new Date(start.getTime() + 6 * 60 * 60 * 1000)
     .toISOString()
     .slice(0, 10);
@@ -45,7 +45,7 @@ export const buildSearchFilter = (query = {}, { userId, now = new Date() } = {})
     }
   }
 
-  
+
   let departureTime = { $gte: now };
   if (date) {
     const range = dayRangeInDhaka(date);
@@ -84,11 +84,9 @@ export const searchRides = async (req, res) => {
     const rides = await Ride.find(filter)
       .sort({ departureTime: 1, farePerSeat: 1 })
       .limit(limit)
-      
       .populate('driver', 'name isVerified verificationStatus averageRating tripCount vehicle')
       .lean();
 
- 
     const results = rides.filter((ride) => ride.driver);
 
     res.status(200).json({ success: true, count: results.length, rides: results });

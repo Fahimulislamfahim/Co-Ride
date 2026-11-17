@@ -1,4 +1,4 @@
-// Run with:  npm run test:utils   (plain Node, no extra packages needed)
+
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -8,22 +8,21 @@ import {
   todayInDhaka,
 } from './rideFilters.js';
 
-// Dhaka is UTC+6, so 07:30 in Dhaka = 01:30 UTC.
 const ride = (id, utc, fare = 50) => ({ _id: id, departureTime: `${utc}Z`, farePerSeat: fare });
 const R = {
-  morning: ride('morning', '2026-11-17T01:30:00', 40),    // 07:30 Dhaka
-  noon: ride('noon', '2026-11-17T06:00:00', 70),          // 12:00 Dhaka (afternoon boundary)
-  afternoon: ride('afternoon', '2026-11-17T10:30:00', 90),// 16:30
-  evening: ride('evening', '2026-11-17T11:00:00', 60),    // 17:00 (evening boundary)
-  late: ride('late', '2026-11-17T16:00:00', 35),          // 22:00 -> night
-  predawn: ride('predawn', '2026-11-17T20:00:00', 80),    // 02:00 next day -> night
+  morning: ride('morning', '2026-11-17T01:30:00', 40),
+  noon: ride('noon', '2026-11-17T06:00:00', 70),
+  afternoon: ride('afternoon', '2026-11-17T10:30:00', 90),
+  evening: ride('evening', '2026-11-17T11:00:00', 60),
+  late: ride('late', '2026-11-17T16:00:00', 35),
+  predawn: ride('predawn', '2026-11-17T20:00:00', 80),
 };
 const all = Object.values(R);
 const ids = (list) => list.map((r) => r._id);
 
 test('getDhakaHour uses Dhaka time regardless of device time zone', () => {
   assert.equal(getDhakaHour('2026-11-17T01:30:00Z'), 7);
-  assert.equal(getDhakaHour('2026-11-16T18:00:00Z'), 0); // midnight in Dhaka
+  assert.equal(getDhakaHour('2026-11-16T18:00:00Z'), 0);
   assert.equal(getDhakaHour('not a date'), null);
 });
 
@@ -67,9 +66,9 @@ test('bad input is handled safely', () => {
   assert.deepEqual(filterRidesByTime(undefined), []);
   assert.deepEqual(filterRidesByTime('nope'), []);
   const broken = [{ _id: 'x', departureTime: 'garbage', farePerSeat: 'free' }, R.morning];
-  assert.deepEqual(ids(filterRidesByTime(broken)), ['morning', 'x']);       // invalid sinks to the bottom
+  assert.deepEqual(ids(filterRidesByTime(broken)), ['morning', 'x']);
   assert.deepEqual(ids(filterRidesByTime(broken, { timeWindow: 'morning' })), ['morning']);
-  assert.deepEqual(ids(filterRidesByTime(all, { timeWindow: 'unknown-id' })).length, all.length); // falls back to 'all'
+  assert.deepEqual(ids(filterRidesByTime(all, { timeWindow: 'unknown-id' })).length, all.length);
 });
 
 test('todayInDhaka returns YYYY-MM-DD', () => {

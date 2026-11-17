@@ -1,5 +1,4 @@
-// Filter Rides By Time — client-side helpers (Module 2, Anika).
-// Pure functions: they never mutate the array they receive.
+
 
 const TIME_ZONE = 'Asia/Dhaka';
 
@@ -24,20 +23,17 @@ const hourFormatter = new Intl.DateTimeFormat('en-GB', {
 
 const dateKeyFormatter = new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE });
 
-// Hour of day (0-23) in Dhaka, independent of the viewer's device time zone.
 export const getDhakaHour = (value) => {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return null;
   return Number(hourFormatter.format(date));
 };
 
-// Today as YYYY-MM-DD in Dhaka (used as the default / minimum of the date picker).
 export const todayInDhaka = () => dateKeyFormatter.format(new Date());
 
 const isInWindow = (hour, window) => {
   if (!window || window.id === 'all') return true;
   if (hour === null) return false;
-  // The night window wraps past midnight (21:00 -> 05:00).
   return window.from < window.to
     ? hour >= window.from && hour < window.to
     : hour >= window.from || hour < window.to;
@@ -53,14 +49,6 @@ const fareOf = (ride) => {
   return Number.isFinite(fare) ? fare : Number.POSITIVE_INFINITY;
 };
 
-/**
- * Narrows and sorts rides.
- * @param {Array}  rides
- * @param {Object} options
- * @param {string} options.timeWindow  'all' | 'morning' | 'afternoon' | 'evening' | 'night'
- * @param {string} options.sortBy      'earliest' (default) | 'cheapest'
- * @param {number|string|null} options.maxFare  optional fare ceiling (BDT per seat)
- */
 export const filterRidesByTime = (
   rides,
   { timeWindow = 'all', sortBy = 'earliest', maxFare = null } = {}
@@ -76,14 +64,13 @@ export const filterRidesByTime = (
     return true;
   });
 
-  // Ties fall back to the other criterion so the order is always stable and sensible.
   const byTime = (a, b) => timeOf(a) - timeOf(b) || fareOf(a) - fareOf(b);
   const byFare = (a, b) => fareOf(a) - fareOf(b) || timeOf(a) - timeOf(b);
   const compare = sortBy === 'cheapest' ? byFare : byTime;
 
   const sorted = narrowed.slice().sort((a, b) => {
     const result = compare(a, b);
-    return Number.isNaN(result) ? 0 : result; // Infinity - Infinity guard
+    return Number.isNaN(result) ? 0 : result;
   });
   return sorted;
 };

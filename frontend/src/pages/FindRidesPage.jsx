@@ -20,7 +20,6 @@ import {
 } from '../utils/rideFilters';
 import '../styles/rides.css';
 
-// Search Available Rides (Module 2, Anika): form + results + client-side time/fare filters.
 function FindRidesPage({ onBack }) {
   const today = todayInDhaka();
   const [form, setForm] = useState({ origin: '', destination: '', date: today, seats: 1 });
@@ -31,7 +30,6 @@ function FindRidesPage({ onBack }) {
   const [hasSearched, setHasSearched] = useState(false);
   const controllerRef = useRef(null);
 
-  // Cancel any in-flight request when leaving the page.
   useEffect(() => () => controllerRef.current?.abort(), []);
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -39,8 +37,6 @@ function FindRidesPage({ onBack }) {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-
-    // A newer search replaces the previous one, so old responses can't overwrite new ones.
     controllerRef.current?.abort();
     const controller = new AbortController();
     controllerRef.current = controller;

@@ -21,8 +21,8 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes); 
-app.use('/api/profile', profileRoutes);
 app.use('/api/rides', rideSearchRoutes);
+app.use('/api/profile', profileRoutes);
 app.get('/', (req, res) => {
   res.send('CoRide API is running...');
 });
