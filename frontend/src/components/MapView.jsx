@@ -13,7 +13,6 @@ L.Icon.Default.mergeOptions({
 });
 
 const DIU_CAMPUS_CENTER = [23.8767, 90.3202];
-
 const RouteBoundsUpdater = ({ startCoords, endCoords }) => {
   const map = useMap();
 

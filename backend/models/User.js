@@ -61,9 +61,21 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+  
+   emergencyContact: {
+      name: { type: String, default: '', trim: true },
+      phone: { type: String, default: '', trim: true },
+    },
+    tripCount: {
+      type: Number,
+      default: 0,
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
-
 const User = mongoose.model('User', userSchema);
 export default User;

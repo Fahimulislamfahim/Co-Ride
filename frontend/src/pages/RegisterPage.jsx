@@ -1,13 +1,28 @@
 import { useState } from 'react';
 import API from '../services/api';
+import { 
+  Car,
+  User, 
+  Hash, 
+  Phone, 
+  Mail, 
+  Lock, 
+  ShieldCheck, 
+  Upload, 
+  FileCheck, 
+  AlertCircle, 
+  Loader2, 
+  CheckCircle2,
+  ArrowLeft 
+} from 'lucide-react';
 
-const RegisterPage = ({ onSwitchToLogin }) => {
+const RegisterPage = ({ onSwitchToLogin, initialRole = 'passenger', onBackToHome }) => {
   const [formData, setFormData] = useState({
     name: '',
     studentId: '',
     email: '',
     password: '',
-    role: 'passenger',
+    role: initialRole || 'passenger',
     phone: '',
   });
   const [error, setError] = useState('');
@@ -73,14 +88,31 @@ const RegisterPage = ({ onSwitchToLogin }) => {
   return (
     <main className="auth_page register_page">
       <div className="auth_card">
+        {onBackToHome && (
+          <button type="button" onClick={onBackToHome} className="auth_back_home_btn">
+            <ArrowLeft size={15} />
+            <span>Back to Home</span>
+          </button>
+        )}
         <header className="auth_header register_header">
+          <div className="brand_logo_container">
+            <div className="brand_icon_glow"></div>
+            <div className="brand_icon_wrapper brand_icon_wrapper--logo">
+              <img src="/logo.png" alt="CoRide Logo" className="auth_brand_logo_img" />
+            </div>
+          </div>
+          <div className="brand_pill_tag">
+            <span className="brand_pill_dot"></span>
+            DIU Smart Mobility
+          </div>
           <h1 className="auth_brand">Co<span className="brand_accent">Ride</span></h1>
           <p className="auth_text">Register for Campus Ridesharing</p>
         </header>
 
         {error && (
           <div className="auth_message error_message">
-            {error}
+            <AlertCircle size={18} className="message_icon" />
+            <span>{error}</span>
           </div>
         )}
 
@@ -89,15 +121,18 @@ const RegisterPage = ({ onSwitchToLogin }) => {
             <label className="form_label">
               Full Name
             </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="e.g. Fahimul Islam"
-              required
-              className="form_input"
-            />
+            <div className="input_with_icon">
+              <User className="field_icon" size={17} />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="e.g. Fahimul Islam"
+                required
+                className="form_input"
+              />
+            </div>
           </div>
 
           <div className="register_fields">
@@ -105,29 +140,35 @@ const RegisterPage = ({ onSwitchToLogin }) => {
               <label className="form_label">
                 Student ID
               </label>
-              <input
-                type="text"
-                name="studentId"
-                value={formData.studentId}
-                onChange={handleChange}
-                placeholder="241-35-371"
-                required
-                className="form_input"
-              />
+              <div className="input_with_icon">
+                <Hash className="field_icon" size={17} />
+                <input
+                  type="text"
+                  name="studentId"
+                  value={formData.studentId}
+                  onChange={handleChange}
+                  placeholder="241-35-371"
+                  required
+                  className="form_input"
+                />
+              </div>
             </div>
 
             <div className="form_field">
               <label className="form_label">
-                Phone
+                Phone Number
               </label>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="017xxxxxxxx"
-                className="form_input"
-              />
+              <div className="input_with_icon">
+                <Phone className="field_icon" size={17} />
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="017xxxxxxxx"
+                  className="form_input"
+                />
+              </div>
             </div>
           </div>
 
@@ -135,39 +176,48 @@ const RegisterPage = ({ onSwitchToLogin }) => {
             <label className="form_label">
               DIU Institutional Email
             </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="student@diu.edu.bd"
-              required
-              className="form_input"
-            />
+            <div className="input_with_icon">
+              <Mail className="field_icon" size={17} />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="student@diu.edu.bd"
+                required
+                className="form_input"
+              />
+            </div>
           </div>
 
           <div className="form_field">
             <label className="form_label">
-              Role
+              Commute Role
             </label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="form_input form_select"
-            >
-              <option value="passenger">Passenger (Looking for rides)</option>
-              <option value="driver">Driver (Have bike/car to share seats)</option>
-            </select>
+            <div className="input_with_icon">
+              <ShieldCheck className="field_icon" size={17} />
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="form_input form_select"
+              >
+                <option value="passenger">Passenger (Looking for campus rides)</option>
+                <option value="driver">Driver (Share vehicle seats with peers)</option>
+              </select>
+            </div>
           </div>
 
           {formData.role === 'driver' && (
             <fieldset className="register_driver_section">
-              <legend>Driver and vehicle details</legend>
+              <legend>
+                <Car size={15} className="legend_icon" />
+                <span>Driver & Vehicle Verification</span>
+              </legend>
 
               <div className="form_field">
                 <label className="form_label" htmlFor="vehicleType">
-                  Vehicle type
+                  Vehicle Type
                 </label>
                 <select
                   id="vehicleType"
@@ -177,15 +227,15 @@ const RegisterPage = ({ onSwitchToLogin }) => {
                   required
                   className="form_input form_select"
                 >
-                  <option value="" disabled>Select a vehicle</option>
-                  <option value="motorcycle">Motorcycle</option>
-                  <option value="car">Car</option>
+                  <option value="" disabled>Select vehicle category</option>
+                  <option value="motorcycle">Motorcycle / Scooter</option>
+                  <option value="car">Car / Microbus</option>
                 </select>
               </div>
 
               <div className="form_field">
                 <label className="form_label" htmlFor="vehicleModel">
-                  Vehicle model
+                  Vehicle Model
                 </label>
                 <input
                   id="vehicleModel"
@@ -202,7 +252,7 @@ const RegisterPage = ({ onSwitchToLogin }) => {
 
               <div className="form_field">
                 <label className="form_label" htmlFor="registrationPlate">
-                  Registration plate number
+                  Registration Plate Number
                 </label>
                 <input
                   id="registrationPlate"
@@ -220,17 +270,31 @@ const RegisterPage = ({ onSwitchToLogin }) => {
 
               <div className="form_field">
                 <label className="form_label" htmlFor="licenseDocument">
-                  Driving license image
+                  Driving License Document
                 </label>
-                <input
-                  id="licenseDocument"
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  onChange={(event) => setLicenseDocument(event.target.files?.[0] || null)}
-                  required
-                  className="form_input register_file_input"
-                />
-                <span className="register_file_hint">JPEG, PNG, or WebP. Maximum 5 MB.</span>
+                <div className="file_upload_box">
+                  <input
+                    id="licenseDocument"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={(event) => setLicenseDocument(event.target.files?.[0] || null)}
+                    required
+                    className="form_input register_file_input"
+                  />
+                  <div className="file_upload_indicator">
+                    {licenseDocument ? (
+                      <span className="file_selected_text">
+                        <FileCheck size={16} className="file_icon_success" />
+                        {licenseDocument.name}
+                      </span>
+                    ) : (
+                      <span className="file_prompt_text">
+                        <Upload size={16} /> Choose document image
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <span className="register_file_hint">Accepted: JPEG, PNG, or WebP. Maximum 5 MB.</span>
               </div>
             </fieldset>
           )}
@@ -239,16 +303,19 @@ const RegisterPage = ({ onSwitchToLogin }) => {
             <label className="form_label">
               Password
             </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Minimum 6 characters"
-              minLength={6}
-              required
-              className="form_input"
-            />
+            <div className="input_with_icon">
+              <Lock className="field_icon" size={17} />
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Minimum 6 characters"
+                minLength={6}
+                required
+                className="form_input"
+              />
+            </div>
           </div>
 
           <button
@@ -256,7 +323,17 @@ const RegisterPage = ({ onSwitchToLogin }) => {
             disabled={loading}
             className="auth_submit"
           >
-            {loading ? 'Creating Account...' : 'Register'}
+            {loading ? (
+              <>
+                <Loader2 className="btn_spinner" size={18} />
+                <span>Creating Account...</span>
+              </>
+            ) : (
+              <>
+                <span>Complete Registration</span>
+                <CheckCircle2 size={17} className="btn_arrow" />
+              </>
+            )}
           </button>
         </form>
 
