@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import API from '../services/api';
 import RideCard from '../components/RideCard';
+import MapView from '../components/MapView';
+import ErrorBoundary from '../components/ErrorBoundary';
 import {
   SORT_OPTIONS,
   TIME_WINDOWS,
@@ -24,6 +26,7 @@ function FindRidesPage({ onBack }) {
   const today = todayInDhaka();
   const [form, setForm] = useState({ origin: '', destination: '', date: today, seats: 1 });
   const [rides, setRides] = useState([]);
+  const [selectedRide, setSelectedRide] = useState(null);
   const [filters, setFilters] = useState({ timeWindow: 'all', sortBy: 'earliest', maxFare: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -50,11 +53,14 @@ function FindRidesPage({ onBack }) {
       if (form.date) params.date = form.date;
 
       const res = await API.get('/rides/search', { params, signal: controller.signal });
-      setRides(res.data.rides || []);
+      const foundRides = res.data.rides || [];
+      setRides(foundRides);
+      setSelectedRide(foundRides.length > 0 ? foundRides[0] : null);
       setHasSearched(true);
     } catch (err) {
       if (err.code === 'ERR_CANCELED') return;
       setRides([]);
+      setSelectedRide(null);
       setHasSearched(true);
       setError(err.response?.data?.message || 'Could not search rides. Please try again.');
     } finally {
@@ -64,6 +70,15 @@ function FindRidesPage({ onBack }) {
 
   const visibleRides = useMemo(() => filterRidesByTime(rides, filters), [rides, filters]);
   const filtersActive = filters.timeWindow !== 'all' || filters.maxFare !== '';
+
+  const startPoint =
+    selectedRide?.origin?.lat !== undefined && selectedRide?.origin?.lng !== undefined
+      ? { title: selectedRide.origin.name, coordinates: [selectedRide.origin.lat, selectedRide.origin.lng] }
+      : null;
+  const endPoint =
+    selectedRide?.destination?.lat !== undefined && selectedRide?.destination?.lng !== undefined
+      ? { title: selectedRide.destination.name, coordinates: [selectedRide.destination.lat, selectedRide.destination.lng] }
+      : null;
 
   return (
     <main className="rides_page">
@@ -231,8 +246,29 @@ function FindRidesPage({ onBack }) {
             </p>
           )}
 
+          {selectedRide && (startPoint || endPoint) && (
+            <div className="rides_map_preview_box" style={{ marginBottom: '1.25rem', border: '1px solid #e5e7eb', borderRadius: '12px', overflow: 'hidden' }}>
+              <div style={{ padding: '0.6rem 1rem', background: '#f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#374151' }}>
+                  Route Map: {selectedRide.origin?.name} → {selectedRide.destination?.name}
+                </span>
+                <span style={{ fontSize: '0.75rem', color: '#047857', background: '#d1fae5', padding: '2px 8px', borderRadius: '9999px', fontWeight: 600 }}>
+                  Interactive Leaflet Route
+                </span>
+              </div>
+              <ErrorBoundary>
+                <MapView start={startPoint} end={endPoint} height="260px" />
+              </ErrorBoundary>
+            </div>
+          )}
+
           {visibleRides.map((ride) => (
-            <RideCard key={ride._id} ride={ride} />
+            <RideCard
+              key={ride._id}
+              ride={ride}
+              isSelected={selectedRide?._id === ride._id}
+              onSelect={(r) => setSelectedRide(r)}
+            />
           ))}
 
           {hasSearched && !error && rides.length === 0 && (

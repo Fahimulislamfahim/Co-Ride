@@ -187,3 +187,35 @@ export const updateRideStatus = async (req, res) => {
     return res.status(500).json({ message: 'Could not update ride status' });
   }
 };
+
+export const cancelRide = async (req, res) => {
+  const { rideId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(rideId)) {
+    return res.status(400).json({ message: 'Invalid ride ID' });
+  }
+
+  try {
+    const ride = await Ride.findOne({ _id: rideId, driver: req.user._id });
+    if (!ride) {
+      return res.status(404).json({ message: 'Ride not found' });
+    }
+
+    if (ride.status === 'completed' || ride.status === 'cancelled') {
+      return res.status(400).json({
+        message: `Cannot cancel a ride that is already ${ride.status}`,
+      });
+    }
+
+    ride.status = 'cancelled';
+    await ride.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Ride cancelled successfully',
+      ride,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'Could not cancel ride' });
+  }
+};

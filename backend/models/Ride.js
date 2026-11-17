@@ -70,5 +70,24 @@ const rideSchema = new mongoose.Schema(
 
 rideSchema.index({ status: 1, departureTime: 1 });
 
+rideSchema.pre('validate', function (next) {
+  if (!this.departureDate && this.departureTime) {
+    this.departureDate = this.departureTime;
+  }
+  if (!this.departureTime && this.departureDate) {
+    this.departureTime = this.departureDate;
+  }
+  if (this.farePerSeat === undefined && this.splitFare !== undefined) {
+    this.farePerSeat = this.splitFare;
+  }
+  if (this.splitFare === undefined && this.farePerSeat !== undefined) {
+    this.splitFare = this.farePerSeat;
+  }
+  if (this.totalSeats === undefined && this.availableSeats !== undefined) {
+    this.totalSeats = this.availableSeats;
+  }
+  next();
+});
+
 const Ride = mongoose.model('Ride', rideSchema);
 export default Ride;

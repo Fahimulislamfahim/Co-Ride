@@ -82,9 +82,11 @@ const seed = async () => {
       origin,
       destination,
       departureTime,
+      departureDate: departureTime,
       totalSeats,
       availableSeats,
       farePerSeat,
+      splitFare: farePerSeat,
       status: 'scheduled',
     }))
   );

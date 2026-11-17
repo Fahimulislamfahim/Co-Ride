@@ -14,7 +14,7 @@ import { formatDeparture } from '../utils/rideFilters';
 
 const capitalize = (text = '') => text.charAt(0).toUpperCase() + text.slice(1);
 
-export default function RideCard({ ride, onRequestSeat }) {
+export default function RideCard({ ride, onRequestSeat, onSelect, isSelected }) {
   const [expanded, setExpanded] = useState(false);
   const { driver = {}, origin, destination } = ride;
   const vehicle = driver.vehicle || {};
@@ -28,7 +28,16 @@ export default function RideCard({ ride, onRequestSeat }) {
   const rating = Number(driver.averageRating);
 
   return (
-    <article className="ride_card" aria-label={`Ride from ${origin?.name} to ${destination?.name}`}>
+    <article
+      className={`ride_card ${isSelected ? 'ride_card--selected' : ''}`}
+      aria-label={`Ride from ${origin?.name} to ${destination?.name}`}
+      onClick={() => onSelect?.(ride)}
+      style={{
+        cursor: onSelect ? 'pointer' : 'default',
+        borderColor: isSelected ? '#10b981' : undefined,
+        boxShadow: isSelected ? '0 0 0 2px rgba(16, 185, 129, 0.25)' : undefined,
+      }}
+    >
       <header className="ride_card_top">
         <div className="ride_driver">
           <div className="ride_driver_avatar" aria-hidden="true">
@@ -85,7 +94,10 @@ export default function RideCard({ ride, onRequestSeat }) {
         <button
           type="button"
           className="ride_toggle"
-          onClick={() => setExpanded((open) => !open)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded((open) => !open);
+          }}
           aria-expanded={expanded}
           aria-controls={detailsId}
         >
@@ -93,11 +105,31 @@ export default function RideCard({ ride, onRequestSeat }) {
           <ChevronDown size={16} className={expanded ? 'ride_chevron ride_chevron--open' : 'ride_chevron'} />
         </button>
 
+        {onSelect && (
+          <button
+            type="button"
+            className="ride_toggle"
+            style={{
+              color: isSelected ? '#059669' : '#4b5563',
+              fontWeight: isSelected ? 600 : 500,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(ride);
+            }}
+          >
+            <span>{isSelected ? '✓ Route on Map' : '🗺️ View Route'}</span>
+          </button>
+        )}
+
         {onRequestSeat && (
           <button
             type="button"
             className="ride_request_btn"
-            onClick={() => onRequestSeat(ride)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRequestSeat(ride);
+            }}
             disabled={seatsLeft === 0}
           >
             Request Seat

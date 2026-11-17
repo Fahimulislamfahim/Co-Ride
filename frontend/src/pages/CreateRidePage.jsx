@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import API from '../services/api';
 import MapView from '../components/MapView';
+import ErrorBoundary from '../components/ErrorBoundary';
 import { CAMPUS_HUBS } from '../components/campusHubs';
 
 const initialForm = {
@@ -126,10 +127,12 @@ const CreateRidePage = ({ onRideCreated }) => {
             <input id="splitFare" className="form_input" type="number" min="0" step="0.01" name="splitFare" value={formData.splitFare} onChange={handleChange} required />
           </div>
         </div>
-        <MapView
-          start={routePoints.origin && { title: routePoints.origin.name, coordinates: routePoints.origin.coords }}
-          end={routePoints.destination && { title: routePoints.destination.name, coordinates: routePoints.destination.coords }}
-        />
+        <ErrorBoundary>
+          <MapView
+            start={routePoints.origin && { title: routePoints.origin.name, coordinates: routePoints.origin.coords }}
+            end={routePoints.destination && { title: routePoints.destination.name, coordinates: routePoints.destination.coords }}
+          />
+        </ErrorBoundary>
         <button type="submit" className="auth_submit" disabled={loading}>
           {loading ? 'Publishing...' : 'Publish ride'}
         </button>
