@@ -89,17 +89,30 @@ export const createRide = async (req, res) => {
       return res.status(400).json({ message: 'Split fare must be a valid non-negative amount' });
     }
 
+    const originLocation = parseCoordinates(originCoordinates, 'Origin');
+    const destinationLocation = parseCoordinates(destinationCoordinates, 'Destination');
+    if (!originLocation || !destinationLocation) {
+      return res.status(400).json({ message: 'Origin and destination coordinates are required' });
+    }
+
     const ride = await Ride.create({
       driver: req.user._id,
-      origin: origin.trim(),
-      destination: destination.trim(),
+      origin: {
+        name: origin.trim(),
+        lat: originLocation.latitude,
+        lng: originLocation.longitude,
+      },
+      destination: {
+        name: destination.trim(),
+        lat: destinationLocation.latitude,
+        lng: destinationLocation.longitude,
+      },
       departureDate: departureDateTime,
-      departureTime,
+      departureTime: departureDateTime,
       availableSeats: seats,
       totalSeats: seatsTotal,
       splitFare: fare,
-      originCoordinates: parseCoordinates(originCoordinates, 'Origin'),
-      destinationCoordinates: parseCoordinates(destinationCoordinates, 'Destination'),
+      farePerSeat: fare,
     });
 
     return res.status(201).json({

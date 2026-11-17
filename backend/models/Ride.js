@@ -1,9 +1,15 @@
 import mongoose from 'mongoose';
 
-const coordinateSchema = new mongoose.Schema(
+const locationSchema = new mongoose.Schema(
   {
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true },
+    name: {
+      type: String,
+      required: [true, 'Location name is required'],
+      trim: true,
+      maxlength: 100,
+    },
+    lat: { type: Number, min: -90, max: 90 },
+    lng: { type: Number, min: -180, max: 180 },
   },
   { _id: false }
 );
@@ -13,52 +19,46 @@ const rideSchema = new mongoose.Schema(
     driver: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'A driver is required to publish a ride'],
+      required: true,
+      index: true,
     },
-    origin: {
-      type: String,
-      required: [true, 'Please enter an origin'],
-      trim: true,
-    },
-    destination: {
-      type: String,
-      required: [true, 'Please enter a destination'],
-      trim: true,
+    origin: { type: locationSchema, required: true },
+    destination: { type: locationSchema, required: true },
+    departureTime: {
+      type: Date,
+      required: [true, 'Departure time is required'],
     },
     departureDate: {
       type: Date,
       required: [true, 'Please select a departure date'],
     },
-    departureTime: {
-      type: String,
-      required: [true, 'Please select a departure time'],
-      match: [/^([01]\d|2[0-3]):[0-5]\d$/, 'Please enter a valid departure time'],
+    totalSeats: {
+      type: Number,
+      required: true,
+      min: [1, 'A ride needs at least 1 seat'],
+      max: [8, 'A ride cannot offer more than 8 seats'],
     },
     availableSeats: {
       type: Number,
-      required: [true, 'Please enter the available seats'],
-      min: [1, 'Available seats must be a positive number'],
+      required: true,
+      min: [0, 'Available seats cannot be negative'],
       validate: {
-        validator: Number.isInteger,
-        message: 'Available seats must be a whole number',
+        validator: function (value) {
+          return value <= this.totalSeats;
+        },
+        message: 'Available seats cannot exceed total seats',
       },
     },
-    totalSeats: {
+    farePerSeat: {
       type: Number,
-      required: [true, 'Please enter the total seats'],
-      min: [1, 'Total seats must be a positive number'],
-      validate: {
-        validator: Number.isInteger,
-        message: 'Total seats must be a whole number',
-      },
+      required: [true, 'Fare per seat is required'],
+      min: [0, 'Fare cannot be negative'],
     },
     splitFare: {
       type: Number,
       required: [true, 'Please enter the split fare'],
       min: [0, 'Split fare cannot be negative'],
     },
-    originCoordinates: coordinateSchema,
-    destinationCoordinates: coordinateSchema,
     status: {
       type: String,
       enum: ['scheduled', 'en_route', 'completed', 'cancelled'],
@@ -67,6 +67,8 @@ const rideSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+rideSchema.index({ status: 1, departureTime: 1 });
 
 const Ride = mongoose.model('Ride', rideSchema);
 export default Ride;

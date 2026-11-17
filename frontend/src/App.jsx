@@ -7,6 +7,7 @@ import CreateRidePage from './pages/CreateRidePage';
 import MyPublishedRides from './pages/MyPublishedRides';
 import API from './services/api';
 import ProfilePage from './pages/ProfilePage';
+import FindRidesPage from './pages/FindRidesPage';
 import VerificationBadge from './components/VerificationBadge';
 import { 
   Car, 
@@ -17,7 +18,8 @@ import {
   Mail, 
   UserCheck, 
   Sparkles,
-  FileText
+  FileText,
+  Search
 } from 'lucide-react';
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
   const [driverProfileError, setDriverProfileError] = useState('');
   const [rideRefreshKey, setRideRefreshKey] = useState(0);
   const [showProfile, setShowProfile] = useState(false);
+  const [showFindRides, setShowFindRides] = useState(false);
 
   useEffect(() => {
     if (currentUser?.role !== 'driver') return undefined;
@@ -55,6 +58,7 @@ function App() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setCurrentUser(null);
+    setShowFindRides(false);
     setView('landing');
   };
 
@@ -93,6 +97,10 @@ function App() {
           <AdminDashboard />
         </div>
       );
+    }
+
+    if (showFindRides) {
+      return <FindRidesPage onBack={() => setShowFindRides(false)} />;
     }
 
     if (showProfile) {
@@ -188,6 +196,14 @@ function App() {
           )}
 
           <div className="profile_actions">
+            <button
+              type="button"
+              onClick={() => setShowFindRides(true)}
+              className="action_btn find_ride_btn"
+            >
+              <Search size={16} />
+              <span>Find a Ride</span>
+            </button>
             <button 
               type="button" 
               onClick={() => setShowProfile(true)}
