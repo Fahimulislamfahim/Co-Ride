@@ -70,7 +70,7 @@ const rideSchema = new mongoose.Schema(
 
 rideSchema.index({ status: 1, departureTime: 1 });
 
-rideSchema.pre('validate', function (next) {
+rideSchema.pre('validate', async function () {
   if (!this.departureDate && this.departureTime) {
     this.departureDate = this.departureTime;
   }
@@ -86,7 +86,6 @@ rideSchema.pre('validate', function (next) {
   if (this.totalSeats === undefined && this.availableSeats !== undefined) {
     this.totalSeats = this.availableSeats;
   }
-  next();
 });
 
 const Ride = mongoose.model('Ride', rideSchema);

@@ -20,7 +20,14 @@ const formatDate = (date) => {
   const parsedDate = new Date(date);
   return Number.isNaN(parsedDate.getTime())
     ? 'Not available'
-    : parsedDate.toLocaleDateString();
+    : parsedDate.toLocaleDateString('en-BD', { timeZone: 'Asia/Dhaka', day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const formatTime = (date) => {
+  const parsedDate = new Date(date);
+  return Number.isNaN(parsedDate.getTime())
+    ? 'Not available'
+    : parsedDate.toLocaleTimeString('en-BD', { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', hour12: true });
 };
 
 const formatLocation = (location) => {
@@ -148,7 +155,7 @@ const MyPublishedRides = ({ refreshKey = 0 }) => {
 
                 <dl className="published_ride_details">
                   <div><dt>Departure date</dt><dd>{formatDate(ride.departureDate)}</dd></div>
-                  <div><dt>Departure time</dt><dd>{ride.departureTime}</dd></div>
+                  <div><dt>Departure time</dt><dd>{formatTime(ride.departureTime)}</dd></div>
                   <div><dt>Available seats</dt><dd>{ride.availableSeats}</dd></div>
                   <div><dt>Total seats</dt><dd>{ride.totalSeats ?? ride.availableSeats}</dd></div>
                   <div><dt>Split fare</dt><dd>{formatFare(ride.splitFare)}</dd></div>
